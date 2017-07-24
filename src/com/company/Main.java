@@ -98,9 +98,7 @@ public class Main {
         dealer_score = Score(dealer_card_1) + Score(dealer_card_2);
 
         System.out.printf("Your cards are %s %s%n", new String(self_card_str_1), new String(self_card_str_2));
-        System.out.printf("Your score is %d and the dealer's face up card is %s%n",
-                          self_score,
-                          new String(dealer_card_str_1));
+        System.out.printf("Your score is %d and the dealer's face up card is %s%n", self_score, new String(dealer_card_str_1));
         Scanner sc = new Scanner(System.in);
         while (user_response == 'Y' && self_score <= 21){
             System.out.printf("Do you want another card? (Y or N)%n");
@@ -111,19 +109,14 @@ public class Main {
                 new_card_str = new char[3];
                 Number_to_Card(new_card, new_card_str);
                 self_score += Score(new_card);
-                System.out.printf("Your new card is %s and your score is now %d%n",
-                                  new String(new_card_str),
-                                  self_score);
+                System.out.printf("Your new card is %s and your score is now %d%n", new String(new_card_str), self_score);
             }
         }
         if (self_score > 21) {
             System.out.printf("You've exceeded 21. You lose!");
         }
         else {
-            System.out.printf("Dealer cards are %s %s and his score is %d%n",
-                              new String(dealer_card_str_1),
-                              new String(dealer_card_str_2),
-                              dealer_score);
+            System.out.printf("Dealer cards are %s %s and his score is %d%n",  new String(dealer_card_str_1), new String(dealer_card_str_2), dealer_score);
 
             while (dealer_score < 17){
                 int new_card = Card_Picker(dealt_cards);
