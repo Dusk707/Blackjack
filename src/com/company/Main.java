@@ -45,7 +45,6 @@ public class Main {
             card[1] = '1';
             card[2] = (char) ('0' + value%10);
         }
-
     }
 
     public int Score(int card){
@@ -64,9 +63,13 @@ public class Main {
                 self_card_1,
                 self_card_2,
                 self_score,
+                self_has_ace = 0,
+                self_ace_subtracted = 0,
                 dealer_card_1,
                 dealer_card_2,
-                dealer_score;
+                dealer_score,
+                dealer_has_ace = 0,
+                dealer_ace_subtracted = 0;
         char
                 user_response = 'Y';
 
@@ -90,17 +93,29 @@ public class Main {
         dealer_card_2 = Card_Picker(dealt_cards);
 
         Number_to_Card(self_card_1, self_card_str_1);
+        if (self_card_1 % 13 + 1 == 1)
+            self_has_ace = 1;
         Number_to_Card(self_card_2, self_card_str_2);
+        if (self_card_2 % 13 + 1 == 1)
+            self_has_ace = 1;
         Number_to_Card(dealer_card_1, dealer_card_str_1);
+        if (dealer_card_1 % 13 + 1 == 1)
+            dealer_has_ace = 1;
         Number_to_Card(dealer_card_2, dealer_card_str_2);
+        if (dealer_card_2 % 13 + 1 == 1)
+            dealer_has_ace = 1;
 
         self_score = Score(self_card_1) + Score(self_card_2);
+        if (self_score == 22) // one the chance two aces are dealt, the score would come back as 22, this will account for the difference
+            self_score -= 10;
         dealer_score = Score(dealer_card_1) + Score(dealer_card_2);
+        if (dealer_score == 22)
+            dealer_score -= 10;
 
         System.out.printf("Your cards are %s %s%n", new String(self_card_str_1), new String(self_card_str_2));
         System.out.printf("Your score is %d and the dealer's face up card is %s%n", self_score, new String(dealer_card_str_1));
         Scanner sc = new Scanner(System.in);
-        while (user_response == 'Y' && self_score <= 21){
+        while (user_response == 'Y' && self_score < 21){
             System.out.printf("Do you want another card? (Y or N)%n");
             user_response = sc.next().charAt(0);
             if (user_response == 'Y'){
@@ -108,7 +123,15 @@ public class Main {
                 char[] new_card_str;
                 new_card_str = new char[3];
                 Number_to_Card(new_card, new_card_str);
+                if (new_card % 13 + 1 == 1) {
+                    self_has_ace = 1;
+                    self_ace_subtracted = 0;
+                }
                 self_score += Score(new_card);
+                if (self_score > 21 && self_has_ace == 1 && self_ace_subtracted == 0) {
+                    self_score -= 10;
+                    self_ace_subtracted = 1;
+                }
                 System.out.printf("Your new card is %s and your score is now %d%n", new String(new_card_str), self_score);
             }
         }
@@ -123,7 +146,15 @@ public class Main {
                 char[] new_card_str;
                 new_card_str = new char[3];
                 Number_to_Card(new_card, new_card_str);
+                if (new_card % 13 + 1 == 1) {
+                    dealer_has_ace = 1;
+                    dealer_ace_subtracted = 0;
+                }
                 dealer_score += Score(new_card);
+                if (dealer_score > 21 && dealer_has_ace == 1 && dealer_ace_subtracted == 0) {
+                    dealer_score -= 10;
+                    dealer_ace_subtracted = 1;
+                }
                 System.out.printf("The dealer's new card is %s and his score is now %d%n",
                                   new String(new_card_str),
                                   dealer_score);
